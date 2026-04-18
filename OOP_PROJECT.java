@@ -55,9 +55,6 @@ class Board {
     }
 }
 
-// ═══════════════════════════════════════════════════════
-//  PACMAN  –  the player character, starts at top-left
-// ═══════════════════════════════════════════════════════
 class Pacman {
 
     private int row;
@@ -73,14 +70,20 @@ class Pacman {
         int targetRow = this.row;
         int targetCol = this.col;
 
-        if (directionKey == 'w') targetRow = this.row - 1; // up
-        if (directionKey == 's') targetRow = this.row + 1; // down
-        if (directionKey == 'a') targetCol = this.col - 1; // left
-        if (directionKey == 'd') targetCol = this.col + 1; // right
+        if (directionKey == 'w')  {
+            targetRow = this.row - 1; // up
+        }
+        if (directionKey == 's'){
+            targetRow = this.row + 1; // down
+        }
+        if (directionKey == 'a'){
+            targetCol = this.col - 1; // left
+        }
+        if (directionKey == 'd') {
+            targetCol = this.col + 1; // right
+        }
 
-        boolean targetIsInsideTheWalls =
-                targetRow > 0 && targetRow < 9 &&
-                        targetCol > 0 && targetCol < 9;
+        boolean targetIsInsideTheWalls = targetRow > 0 && targetRow < 9 && targetCol > 0 && targetCol < 9;
 
         if (targetIsInsideTheWalls) {
             this.row = targetRow;
@@ -102,37 +105,34 @@ class Pacman {
         return "Pacman at (" + this.row + ", " + this.col + ")";
     }
 }
-
-// ═══════════════════════════════════════════════════════
-//  GHOST  –  wanders randomly, starts at bottom-right
-// ═══════════════════════════════════════════════════════
 class Ghost {
-
     private int row;
     private int col;
     private Random randomNumberPicker;
-
     Ghost(int startRow, int startCol) {
-        this.row               = startRow;
-        this.col               = startCol;
+        this.row = startRow;
+        this.col = startCol;
         this.randomNumberPicker = new Random();
     }
-
     void wanderRandomly() {
         int targetRow = this.row;
         int targetCol = this.col;
-
         // 0 = up, 1 = down, 2 = left, 3 = right
         int chosenDirection = randomNumberPicker.nextInt(4);
 
-        if (chosenDirection == 0) targetRow = this.row - 1; // up
-        if (chosenDirection == 1) targetRow = this.row + 1; // down
-        if (chosenDirection == 2) targetCol = this.col - 1; // left
-        if (chosenDirection == 3) targetCol = this.col + 1; // right
-
-        boolean targetIsInsideTheWalls =
-                targetRow > 0 && targetRow < 9 &&
-                        targetCol > 0 && targetCol < 9;
+        if (chosenDirection == 0) {
+            targetRow = this.row - 1; // up
+        }
+        if (chosenDirection == 1){
+            targetRow = this.row + 1; // down 
+        }
+        if (chosenDirection == 2) {
+            targetCol = this.col - 1; // left
+        }
+        if (chosenDirection == 3) {
+            targetCol = this.col + 1; // right
+        }
+        boolean targetIsInsideTheWalls =targetRow > 0 && targetRow < 9 && targetCol > 0 && targetCol < 9;
 
         if (targetIsInsideTheWalls) {
             this.row = targetRow;
@@ -148,17 +148,11 @@ class Ghost {
         return "Ghost at (" + this.row + ", " + this.col + ")";
     }
 }
-
-// ═══════════════════════════════════════════════════════
-//  FOOD  –  a 10x10 boolean grid (true = food is here)
-// ═══════════════════════════════════════════════════════
 class Food {
-
     // true  = food dot is still here
     // false = already eaten (or a wall / spawn cell)
     private boolean[][] foodGrid = new boolean[10][10];
     private int totalFoodCount;
-
     Food(int pacmanStartRow,int pacmanStartCol,int ghostStartRow,int ghostStartCol){
         this.totalFoodCount = 0;
         for(int row=1;row<9;row++){
