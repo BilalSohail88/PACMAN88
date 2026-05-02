@@ -1,7 +1,7 @@
 import java.util.Scanner;
 import java.util.Random;
 // this draws a 10x10 grid every timec
-class Board {
+class Board {//prepares the board
     private char[][] grid=new char[10][10];
     void draw(int pacmanRow,int pacmanCol,int ghostRow,int ghostCol,boolean[][] foodGrid){
         prepareBlankGrid();
