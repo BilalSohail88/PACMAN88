@@ -1,16 +1,16 @@
 import java.util.Scanner;
 import java.util.Random;
 // this draws a 10x10 grid every timec
-class Board {//prepares the board
+class Board{
     private char[][] grid=new char[10][10];
-    void draw(int pacmanRow,int pacmanCol,int ghostRow,int ghostCol,boolean[][] foodGrid){
-        prepareBlankGrid();
-        placeBorderWalls();
-        placeFoodDots(foodGrid);
-        placeCharacters(pacmanRow, pacmanCol, ghostRow, ghostCol);
-        printGridToConsole();
+    void draw(int pacmanrow,int pacmancol,int ghostrow,int ghostcol,boolean[][] foodGrid){
+        prepareblankgrid();
+        placeborderwalls();
+        placefooddots(foodGrid);
+        placecharacters(pacmanrow, pacmancol, ghostrow, ghostcol);
+        printgridtoconsole();
     }
-    private void prepareBlankGrid(){
+    private void prepareblankgrid(){
         // used to prepare the empty space inside borders
         for(int row=0;row<10;row++){
             for (int col=0;col<10;col++){
@@ -18,7 +18,7 @@ class Board {//prepares the board
             }
         }
     }
-    private void placeBorderWalls(){
+    private void placeborderwalls(){
         //places the border which is "="
         for(int row=0;row<10;row++){
             for(int col=0;col<10;col++){
@@ -28,139 +28,141 @@ class Board {//prepares the board
             }
         }
     }
-    // If a cell has food (true), stamp a dot there
-    private void placeFoodDots(boolean[][] foodGrid) {
-        for (int row = 1; row < 9; row++) {
-            for (int col = 1; col < 9; col++) {
-                if (foodGrid[row][col]) {
-                    grid[row][col] = '.';
+    //places food
+    private void placefooddots(boolean[][] foodGrid) {
+        for (int row=1;row<9;row++){
+            for(int col=1;col<9;col++){
+                if(foodGrid[row][col]){
+                    grid[row][col]='.';
                 }
             }
         }
     }
-
-    private void placeCharacters(int pacmanRow, int pacmanCol,
-                                 int ghostRow,  int ghostCol) {
-        grid[pacmanRow][pacmanCol] = 'P';
-        grid[ghostRow][ghostCol]   = 'G';
+    private void placecharacters(int pacmanRow,int pacmanCol,int ghostRow, int ghostCol){
+        grid[pacmanRow][pacmanCol]='P';
+        grid[ghostRow][ghostCol]='G';
     }
-
-    private void printGridToConsole() {
-        for (int row = 0; row < 10; row++) {
+    private void printgridtoconsole() {
+        for (int row=0;row<10;row++) {
             for (int col = 0; col < 10; col++) {
-                System.out.print(grid[row][col] + " ");
+                System.out.print(grid[row][col]+" ");
             }
             System.out.println();
         }
     }
 }
-
 class Pacman {
-
     private int row;
     private int col;
 
     // Constructor sets the starting position
-    Pacman(int startRow, int startCol) {
-        this.row = startRow;
-        this.col = startCol;
+    Pacman(int startRow,int startCol) {
+        this.row=startRow;
+        this.col=startCol;
     }
-
-    void move(char directionKey) {
-        int targetRow = this.row;
-        int targetCol = this.col;
-
-        if (directionKey == 'w')  {
-            targetRow = this.row - 1; // up
+    void move(char directionKey){
+        int targetRow=this.row;
+        int targetCol=this.col;
+        if(directionKey=='w'){
+            targetRow=this.row-1; // up
         }
-        if (directionKey == 's'){
-            targetRow = this.row + 1; // down
+        if(directionKey=='s'){
+            targetRow=this.row + 1;// down
         }
-        if (directionKey == 'a'){
-            targetCol = this.col - 1; // left
+        if(directionKey=='a'){
+            targetCol=this.col-1; // left
         }
-        if (directionKey == 'd') {
-            targetCol = this.col + 1; // right
+        if(directionKey=='d'){
+            targetCol=this.col+1; // right
         }
-
-        boolean targetIsInsideTheWalls = targetRow > 0 && targetRow < 9 && targetCol > 0 && targetCol < 9;
-
-        if (targetIsInsideTheWalls) {
-            this.row = targetRow;
-            this.col = targetCol;
+        boolean targetIsInsideTheWalls=targetRow>0 && targetRow<9 && targetCol>0 && targetCol<9;
+        if (targetIsInsideTheWalls){
+            this.row=targetRow;
+            this.col=targetCol;
         }
     }
-
     void resetToSpawnPosition() {
         this.row = 1;
         this.col = 1;
     }
-
-    // Getters – data hiding: row and col are private
-    int getRow() { return this.row; }
-    int getCol() { return this.col; }
-
+    // Getters data hiding row and col are private
+    int getRow() {
+        return this.row;
+    }
+    int getCol() {
+        return this.col;
+    }
     @Override
     public String toString() {
+
         return "Pacman at (" + this.row + ", " + this.col + ")";
     }
 }
+//ghost starts at bottom-right
 class Ghost {
     private int row;
     private int col;
-    private Random randomNumberPicker;
+    private Random randomnumberpicker;
+    void chasePacman(int pacmanRow,int pacmanCol)//this method first makes the row same thats why first row is checked if row is same then column is made same
+    {
+        //moves ghost verticaly
+        if(pacmanRow<this.row){
+            this.row--;
+        }
+        else if(pacmanRow>this.row){
+            this.row++;
+        }
+        //if rows are same then  ghost moves horizontaly
+        else if(pacmanCol<this.col){
+            this.col--;
+        }
+        else if(pacmanCol>this.col){
+            this.col++;
+        }
+        //this prevents ghost from crossing the  walls
+        if(this.row<=0){
+            this.row=1;
+        }
+        if(this.row>=9){
+            this.row=8;
+        }
+        if(this.col<=0){
+            this.col=1;
+        }
+        if(this.col>=9){
+            this.col=8;
+        }
+    }
     Ghost(int startRow, int startCol) {
-        this.row = startRow;
-        this.col = startCol;
-        this.randomNumberPicker = new Random();
+        this.row= startRow;
+        this.col= startCol;
+        this.randomnumberpicker = new Random();
     }
-    void wanderRandomly() {
-        int targetRow = this.row;
-        int targetCol = this.col;
-        // 0 = up, 1 = down, 2 = left, 3 = right
-        int chosenDirection = randomNumberPicker.nextInt(4);
-
-        if (chosenDirection == 0) {
-            targetRow = this.row - 1; // up
-        }
-        if (chosenDirection == 1){
-            targetRow = this.row + 1; // down 
-        }
-        if (chosenDirection == 2) {
-            targetCol = this.col - 1; // left
-        }
-        if (chosenDirection == 3) {
-            targetCol = this.col + 1; // right
-        }
-        boolean targetIsInsideTheWalls =targetRow > 0 && targetRow < 9 && targetCol > 0 && targetCol < 9;
-
-        if (targetIsInsideTheWalls) {
-            this.row = targetRow;
-            this.col = targetCol;
-        }
+    int getRow(){
+        return this.row;
     }
-
-    int getRow() { return this.row; }
-    int getCol() { return this.col; }
+    int getCol()
+    {
+        return this.col;
+    }
 
     @Override
     public String toString() {
         return "Ghost at (" + this.row + ", " + this.col + ")";
     }
 }
-class Food {
-    // true  = food dot is still here
-    // false = already eaten (or a wall / spawn cell)
+class Food{
+    // true=food dot is still here
+    // false=already eaten (or a wall / spawn cell)
     private boolean[][] foodGrid = new boolean[10][10];
     private int totalFoodCount;
     Food(int pacmanStartRow,int pacmanStartCol,int ghostStartRow,int ghostStartCol){
         this.totalFoodCount = 0;
         for(int row=1;row<9;row++){
             for(int col=1;col<9;col++){
-                boolean thisCellIsPacmansSpawn =
-                        (row ==pacmanStartRow && col==pacmanStartCol);
-                boolean thisCellIsGhostsSpawn =(row == ghostStartRow && col == ghostStartCol);
-                boolean safeToPlaceFoodHere = !thisCellIsPacmansSpawn && !thisCellIsGhostsSpawn;
+                boolean thisCellIsPacmansSpawn=(row==pacmanStartRow && col==pacmanStartCol);
+                boolean thisCellIsGhostsSpawn =(row==ghostStartRow && col==ghostStartCol);
+                boolean safeToPlaceFoodHere=!thisCellIsPacmansSpawn && !thisCellIsGhostsSpawn;
                 if (safeToPlaceFoodHere){
                     foodGrid[row][col]=true; // places food at empty places
                     this.totalFoodCount++;
@@ -172,7 +174,7 @@ class Food {
     }
     // called when pacman steps on a cell removes food if present at the same point
     // returns true if food was actually eaten(this is done so we can add it to score )
-    boolean tryEatFoodAt(int row, int col) {
+    boolean tryEatFoodAt(int row,int col) {
         if (foodGrid[row][col]) {
             foodGrid[row][col] = false; // food is now gone from this cell
             this.totalFoodCount--;
@@ -214,11 +216,11 @@ public class OOP_PROJECT {
             board.draw(pacman.getRow(),pacman.getCol(),ghost.getRow(),ghost.getCol(),food.getFoodGrid());
             System.out.printf("Score: %d   Lives: %d%n", score, lives);
             //asks the player which way to move
-            System.out.printf("Move(W=up, A = left, S = down, D = right): ");
+            System.out.printf("Move(W=up, A=left, S=down, D=right):");
             char keyPressed = keyboard.next().toLowerCase().charAt(0);
             //ghost moves randomly wherease pacman moves depending on input
             pacman.move(keyPressed);
-            ghost.wanderRandomly();
+            ghost.chasePacman(pacman.getRow(),pacman.getCol());
             //checks if pacman ate the food or not if food and pacman are at same position pacman ate food otherwise not
             boolean pacmanJustAteFood=food.tryEatFoodAt(pacman.getRow(),pacman.getCol());
             if (pacmanJustAteFood) {
